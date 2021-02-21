@@ -11,7 +11,7 @@ const initialColor = {
 const ColorList = ({ colors, updateColors }) => {
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
-  const { id } = useParams();
+  // const { id } = useParams();
 
   const editColor = (color) => {
     setEditing(true);
@@ -20,33 +20,34 @@ const ColorList = ({ colors, updateColors }) => {
 
   const saveEdit = (e) => {
     e.preventDefault();
-
+    // console.log(colorToEdit);
     axiosWithAuth()
-      .put(`colors/${id}`, colorToEdit)
+      .put(`colors/${colorToEdit.id}`, colorToEdit)
       .then((res) => {
-        console.log(id);
-        console.log(res.data);
-        console.log(colors);
-        updateColors(
-          colors.map((item) => {
-            if (item.id === id) {
-              return res.data;
-            } else {
-              return item;
-            }
-          })
-        );
+        const filter = colors.filter((color) => color.id !== colorToEdit.id);
+        updateColors([...filter, res.data]);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const deleteColor = (color) => {};
+  const deleteColor = (color) => {
+    axiosWithAuth()
+      .delete(`colors/${color.id}`, color)
+      .then((res) => {
+        // console.log(res);
+        const filter = colors.filter((c) => c.id !== color.id);
+        updateColors(filter);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <div className="colors-wrap">
-      <p>colors</p>
+      <p data-testid="color-test">colors</p>
       <ul>
         {colors.map((color) => (
           <li key={color.color} onClick={() => editColor(color)}>

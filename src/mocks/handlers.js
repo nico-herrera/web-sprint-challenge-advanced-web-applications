@@ -87,10 +87,10 @@ let nextId = 12;
 
 function authenticator(req) {
   const { authorization } = req.headers.map;
-  return (authorization === token);
+  return authorization === token;
 }
 
-const urlBase = 'http://localhost:5000/api';
+const urlBase = "http://localhost:5000/api";
 
 export const handlers = [
   // Handles a POST /login request
@@ -98,26 +98,27 @@ export const handlers = [
     const { username, password } = req.body;
     if (username === "Lambda School" && password === "i<3Lambd4") {
       return res(
-          ctx.status(200),
-          ctx.json({
-              payload: token,
-          }))
+        ctx.status(200),
+        ctx.json({
+          payload: token,
+        })
+      );
     } else {
-        return res(
-            ctx.status(403),
-            ctx.json({ error: "Username or Password incorrect. Please see Readme" })
-        );
+      return res(
+        ctx.status(403),
+        ctx.json({ error: "Username or Password incorrect. Please see Readme" })
+      );
     }
   }),
   // Handles a GET /user request
   rest.get(`${urlBase}/colors`, (req, res, ctx) => {
     if (authenticator(req)) {
-      return res(
-        ctx.status(200),
-        ctx.json(colors)
-      );
+      return res(ctx.status(200), ctx.json(colors));
     } else {
-      return res(ctx.status(403), ctx.json({ error: "User must be logged in to do that." }));
+      return res(
+        ctx.status(403),
+        ctx.json({ error: "User must be logged in to do that." })
+      );
     }
   }),
 
@@ -131,7 +132,10 @@ export const handlers = [
       nextId = nextId + 1;
       return res(ctx.status(201), ctx.json(colors));
     } else {
-      return res(ctx.status(403), ctx.json({ error: "User must be logged in to do that." }));
+      return res(
+        ctx.status(403),
+        ctx.json({ error: "User must be logged in to do that." })
+      );
     }
   }),
 
@@ -160,7 +164,10 @@ export const handlers = [
 
       return res(ctx.status(200), ctx.json(req.body));
     } else {
-      return res(ctx.status(403), ctx.json({ error: "User must be logged in to do that." }));
+      return res(
+        ctx.status(403),
+        ctx.json({ error: "User must be logged in to do that." })
+      );
     }
   }),
 
@@ -175,7 +182,10 @@ export const handlers = [
       colors = colors.filter((color) => `${color.id}` !== req.params.id);
       return res(ctx.status(202), ctx.json(req.params.id));
     } else {
-      return res(ctx.status(403), ctx.json({ error: "User must be logged in to do that." }));
+      return res(
+        ctx.status(403),
+        ctx.json({ error: "User must be logged in to do that." })
+      );
     }
   }),
 

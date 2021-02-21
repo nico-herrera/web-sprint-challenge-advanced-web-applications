@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { history } from "../history";
 import axios from "axios";
 
 const Login = () => {
@@ -9,7 +9,7 @@ const Login = () => {
   });
   // make a post request to retrieve a token from the api
   // when you have handled the token, navigate to the BubblePage route
-  const history = useHistory();
+  // const history = useHistory();
 
   useEffect(() => {
     axios
@@ -29,7 +29,6 @@ const Login = () => {
           .then((res) => {
             console.log(res);
           });
-        console.log(res);
       });
   });
 
@@ -42,7 +41,7 @@ const Login = () => {
     axios
       .post("http://localhost:5000/api/login", credentials)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         localStorage.setItem("token", res.data.payload);
         history.push("/bubble-page");
       })
@@ -60,6 +59,7 @@ const Login = () => {
           name="username"
           value={credentials.username}
           onChange={changeHandler}
+          data-testid="test-username"
         />
         <label>Password</label>
         <input
@@ -69,6 +69,7 @@ const Login = () => {
           name="password"
           value={credentials.password}
           onChange={changeHandler}
+          data-testid="test-password"
         />
         <button>Log in</button>
       </form>
